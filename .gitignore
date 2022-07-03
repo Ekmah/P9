@@ -1,4 +1,4 @@
 /venv/
 project/settings.py
 __pycache__
-.idea
+/.idea/
