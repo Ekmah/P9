@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="row justify-content-around mt-5">
+    <div class="col-sm-3 ">
+        <h4>Inscrivez-vous maintenant</h4>
+        <a href="{% url 'signup_v' %}" class="btn btn-outline-primary">S'inscrire</a>
+    </div>
+    <div class="col-sm-3">
+        <h4>Connectez-vous</h4>
+        <form action="" method="post" name="login"
+              class="" id="">{% csrf_token %}
+            <input type="text" id="username" name="username" minlength="1"
+                   placeholder="Nom d'Utilisateur" class="col-12 mt-1" required>
+            <input type="password" id="password" name="password" minlength="4"
+                   placeholder="Mot de passe" class="col-12 mt-1" required>
+            <button type="submit" name="login"
+                    class="btn btn-outline-success mt-2">
+                Se Connecter
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
