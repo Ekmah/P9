@@ -7,8 +7,26 @@
 </div>
 <div>
  {{articles}}
+ <hr>
  {% if articles %}
   {% for article in articles %}
+   {% if article.title %}
+    b
+    {{ article.title }}
+    {{ article.description }}
+    {{ article.user }}
+    {{ article.image }}
+    {{ article.time_created }}
+   {% else %}
+    a
+    {{ article.ticket }}
+    {{ article.rating }}
+    {{ article.headline }}
+    {{ article.body }}
+    {{ article.user }}
+    {{ article.time_created }}
+   {% endif %}
+ <hr>
   {% endfor %}
  {% endif %}
 </div>

@@ -1,3 +1,4 @@
+from itertools import chain
 from django.shortcuts import render, redirect
 from django.db.models import Max, Q, Count
 from django.contrib.auth import logout, login, authenticate
@@ -5,9 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, permission_required
 from litreview.models import Ticket, Review, UserFollows
 from litreview.forms import AskCriticForm, AnswerCriticForm
-
-
-# Create your views here.
 
 
 @login_required
@@ -20,9 +18,8 @@ def flux(request):
         reviews = Review.objects.filter(
             Q(user__in=follows) | Q(user=request.user))
         print(tickets, reviews)
-        articles = list(tickets.values())
-        articles.extend(list(reviews.values()))
-        articles = sorted(articles, key=lambda d: d['time_created'])
+        articles = sorted(chain(tickets, reviews),
+                          key=lambda d: d.time_created, reverse=True)
     except AttributeError:
         articles = False
     context = {'articles': articles}
@@ -116,8 +113,23 @@ def modify_ask(request):
 
 
 def follows(request):
-    users_following = UserFollows.objects.filter(
-        user=request.user).values_list('followed_user', flat=True)
-    users_followed = UserFollows.objects.filter(user=request.user).values_list(
-        'user', flat=True)
+    if request.method == 'POST':
+        data = dict(request.POST.items())
+        if 'add_follow' in request.POST:
+            followed = User.objects.get(username=data['new_followed'])
+            UserFollows.objects.get_or_create(user=request.user,
+                                              followed_user=followed)
+        if 'unfollow' in request.POST:
+            relation = UserFollows.objects.get(user=request.user,
+                                               followed_user=data['unfollow'])
+            relation.delete()
+    the_user_follow_those_users = [user.followed_user for user in
+                                   UserFollows.objects.filter(
+                                       user=request.user)]
+    those_users_follow_the_user = [user.user for user in
+                                   UserFollows.objects.filter(
+                                       followed_user=request.user)]
+    context = {'users_following': those_users_follow_the_user,
+               'users_followed': the_user_follow_those_users}
+    return render(request, 'litreview/follows.html', context)
 

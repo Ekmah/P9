@@ -1,15 +1,32 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
- <a href="{% url 'ask_critic' %}" class="btn btn-outline-dark col-2 m-4">Demander une critique</a>
- <a href="{% url 'create_critic' %}" class="btn btn-outline-dark col-2 m-4">Créer une critique</a>
-</div>
-<div>
- {{articles}}
- {% if articles %}
-  {% for article in articles %}
-  {% endfor %}
- {% endif %}
-</div>
+<form action="" method="post" name="add_follow"
+      class="m-5" autocomplete="off">{% csrf_token %}
+    <input type="text" id="new_followed_username" name="new_followed" minlength="1"
+           placeholder="Nom d'Utilisateur" autocomplete="off"
+           class="col-12 mt-1">
+    <button type="submit" name="add_follow"
+            class="btn btn-outline-success mt-2">
+        Envoyer
+    </button>
+</form>
+<h4>abonnement</h4>
+{% for user in users_followed %}
+{{ user }}
+<form action="" method="post" name="unfollow"
+      class="" autocomplete="off">{% csrf_token %}
+    <button type="submit" name="unfollow" value="{{user.id}}"
+            class="btn btn-outline-warning">
+        Désabonner
+    </button>
+</form>
+{% endfor %}
+<hr>
+<h4>abonnés</h4>
+
+{% for user in users_following %}
+{{ user }}
+{% endfor %}
+
 {% endblock %}
