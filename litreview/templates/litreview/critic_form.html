@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<form action="" method="post" name="critic"
+      class="m-5" id="">{% csrf_token %}
+    {% if form_ask %}
+    {{ form_ask }}
+    {% endif %}
+
+    {% if form_ask and form_answr %}
+    <hr>
+    {% endif %}
+    {% if not form_ask and form_answr %}
+    <hr>
+    {% endif %}
+    {% if form_answr %}
+    {{ form_answr }}
+    {% endif %}
+    <button type="submit" name="critic"
+            class="btn btn-outline-success mt-2">
+        Envoyer
+    </button>
+</form>
+{% endblock %}
