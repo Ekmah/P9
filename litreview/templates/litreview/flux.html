@@ -15,19 +15,38 @@
     <div class="border border-dark m-2 p-2 w-50">
         <div class="d-flex justify-content-between">
             <span>
-                {{ article.user }} a demandé une critique
+                {{article.user}} a demandé une critique
             </span>
             <span>
                 {{ article.time_created}}
             </span>
         </div>
         <span>
-            {{ article.title }}
+            {{article.title}}
         </span>
         <p>{{article.description }}</p>
         {% if article.image %}
             <img src="{{ article.image.url }}" class="img-fluid w-50" />
-        {% endif %}
+        {% endif %}<br>
+        <div class="d-flex">
+            {% if not posts %}
+                {% if not article.review %}
+            <a href="{% url 'answer_critic' article.id %}" class="m-1 btn btn-outline-primary">
+                Créer une critique
+            </a>
+            {% endif %}
+            {% else %}
+            <a href="{% url 'modify_ask' article.id %}" class="m-1 btn btn-outline-dark">
+                Modifier
+            </a>
+            <form action="" method="post" name="delete" class="" autocomplete="off">{% csrf_token %}
+                <button type="submit" name="delete_ask" value="{{article.id}}"
+                        class="m-1 btn btn-outline-danger">
+                    Supprimer
+                </button>
+            </form>
+            {% endif %}
+        </div>
     </div>
     {% else %}
     <div class="border border-dark m-2 p-2 w-50">
@@ -58,6 +77,19 @@
             <p>{{article.ticket.description }}</p>
             {% if article.ticket.image %}
                 <img src="{{ article.ticket.image.url }}" class="img-fluid w-50" />
+            {% endif %}
+        </div>
+        <div class="d-flex m-2">
+            {% if posts %}
+            <a href="{% url 'modify_critic' article.id %}" class="m-1 btn btn-outline-dark">
+                Modifier
+            </a>
+            <form action="" method="post" name="delete" class="" autocomplete="off">{% csrf_token %}
+                <button type="submit" name="delete_review" value="{{article.id}}"
+                        class="m-1 btn btn-outline-danger">
+                    Supprimer
+                </button>
+            </form>
             {% endif %}
         </div>
     </div>

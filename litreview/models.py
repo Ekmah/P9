@@ -13,7 +13,7 @@ class Ticket(models.Model):
 
 
 class Review(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    ticket = models.OneToOneField(Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(
         choices=list(zip(range(1, 6), range(1, 6))),
         validators=[MinValueValidator(0), MaxValueValidator(5)],

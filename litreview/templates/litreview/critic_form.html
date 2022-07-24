@@ -3,7 +3,32 @@
 {% block content %}
 <form action="" method="post" name="critic"
       class="m-5" id="" enctype="multipart/form-data">{% csrf_token %}
+    {% if ticket %}
+    <div class="d-flex flex-column mx-5">
+        <span>Vous êtes en train de poster en réponse à:</span>
+        <div class="d-flex justify-content-center">
+            <div class="border border-dark m-2 p-2 w-50">
+                <div class="d-flex justify-content-between">
+                    <span>
+                        {{ticket.user}} a demandé une critique
+                    </span>
+                    <span>
+                        {{ ticket.time_created}}
+                    </span>
+                </div>
+                <span>
+                    {{ticket.title}}
+                </span>
+                <p>{{ticket.description }}</p>
+                {% if ticket.image %}
+                    <img src="{{ ticket.image.url }}" class="img-fluid w-50" />
+                {% endif %}<br>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% if form_ask %}
+    <h5>Livre/Article</h5><br>
     {{ form_ask }}
     {% endif %}
 
@@ -14,6 +39,7 @@
     <hr>
     {% endif %}
     {% if form_answr %}
+    <h5>Critique</h5><br>
     {{ form_answr.headline.label }}:
     {{ form_answr.headline }}
     {{ form_answr.rating.label }}:<br>

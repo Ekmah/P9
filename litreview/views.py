@@ -26,6 +26,25 @@ def flux(request):
     return render(request, 'litreview/flux.html', context)
 
 
+@login_required
+def posts(request):
+    if request.method == 'POST':
+        if 'delete_ask' in request.POST:
+            Ticket.objects.get(id=request.POST['delete_ask']).delete()
+        if 'delete_review' in request.POST:
+            Review.objects.get(id=request.POST['delete_review']).delete()
+    try:
+        tickets = Ticket.objects.filter(user=request.user)
+        reviews = Review.objects.filter(user=request.user)
+        print(tickets, reviews)
+        articles = sorted(chain(tickets, reviews),
+                          key=lambda d: d.time_created, reverse=True)
+    except AttributeError:
+        articles = False
+    context = {'articles': articles, 'posts': True}
+    return render(request, 'litreview/flux.html', context)
+
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -92,25 +111,50 @@ def create_critic(request):
 
 
 def answer_critic(request, ticket_id):
+    ticket = False
     if request.method == 'POST':
         form_answr = AnswerCriticForm(request.POST)
         if form_answr.is_valid():
             review = form_answr.save(commit=False)
             review.user = User.objects.get(id=request.user.id)
+            review.ticket = Ticket.objects.get(id=ticket_id)
             review.save()
             return redirect('flux')
     else:
         form_answr = AnswerCriticForm()
-    context = {'form_answr': form_answr}
+        ticket = Ticket.objects.get(id=ticket_id)
+    context = {'form_answr': form_answr, 'ticket': ticket}
     return render(request, 'litreview/critic_form.html', context)
 
 
-def modify_critic(request):
-    pass
+def modify_critic(request, review_id):
+    review = Review.objects.get(id=review_id)
+    if request.method == 'POST':
+        form_answr = AnswerCriticForm(request.POST, instance=review)
+        if form_answr.is_valid():
+            review = form_answr.save(commit=False)
+            review.save()
+            return redirect('posts')
+    else:
+        form_answr = AnswerCriticForm(instance=review)
+        ticket = review.ticket
+    context = {'form_answr': form_answr, 'ticket': ticket}
+    return render(request, 'litreview/critic_form.html', context)
 
 
-def modify_ask(request):
-    pass
+def modify_ask(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+    if request.method == 'POST':
+        form_ask = AskCriticForm(request.POST, request.FILES, instance=ticket)
+        if form_ask.is_valid():
+            ticket = form_ask.save(commit=False)
+            ticket.user = User.objects.get(id=request.user.id)
+            ticket.save()
+            return redirect('posts')
+    else:
+        form_ask = AskCriticForm(instance=ticket)
+    context = {'form_ask': form_ask}
+    return render(request, 'litreview/critic_form.html', context)
 
 
 def follows(request):
