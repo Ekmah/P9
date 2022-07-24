@@ -16,19 +16,19 @@ class AskCriticForm(forms.ModelForm):
             'image': forms.FileInput(
                 attrs={'class': 'form-control'})
         }
-        labels = {'title': 'Titre', 'description': 'Description',
+        labels = {'title': 'Titre du livre', 'description': 'Description',
                   'image': 'Image'}
 
 
 class AnswerCriticForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ("headline","rating", "body")
+        fields = ("headline", "rating", "body")
         widgets = {
             'headline': forms.TextInput(
                 attrs={'class': 'form-control', 'maxlength': '128'}),
             'rating': forms.RadioSelect(
-                attrs={'class': ''}
+                attrs={'class': 'inline'}
             ),
             'body': forms.Textarea(
                 attrs={'class': 'form-control', 'maxlength': '8192'}),

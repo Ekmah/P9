@@ -11,3 +11,6 @@ faire mon propre login au lieu d'utiliser celui de django...
 repasser diapo P7
 8 au 25 juillet
 potdefleur123
+
+
+image location setup settings

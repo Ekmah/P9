@@ -1,33 +1,67 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
 <div class="row justify-content-center mt-5">
- <a href="{% url 'ask_critic' %}" class="btn btn-outline-dark col-2 m-4">Demander une critique</a>
- <a href="{% url 'create_critic' %}" class="btn btn-outline-dark col-2 m-4">Créer une critique</a>
+    <a href="{% url 'ask_critic' %}" class="btn btn-outline-dark col-2 m-4">
+        Demander une critique
+    </a>
+    <a href="{% url 'create_critic' %}" class="btn btn-outline-dark col-2 m-4">
+        Créer une critique
+    </a>
 </div>
-<div>
- {{articles}}
- <hr>
- {% if articles %}
-  {% for article in articles %}
-   {% if article.title %}
-    b
-    {{ article.title }}
-    {{ article.description }}
-    {{ article.user }}
-    {{ article.image }}
-    {{ article.time_created }}
-   {% else %}
-    a
-    {{ article.ticket }}
-    {{ article.rating }}
-    {{ article.headline }}
-    {{ article.body }}
-    {{ article.user }}
-    {{ article.time_created }}
-   {% endif %}
- <hr>
-  {% endfor %}
- {% endif %}
-</div>
-{% endblock %}
+<div class="d-flex align-items-center flex-column">
+    {% if articles %}
+    {% for article in articles %}
+    {% if article.title %}
+    <div class="border border-dark m-2 p-2 w-50">
+        <div class="d-flex justify-content-between">
+            <span>
+                {{ article.user }} a demandé une critique
+            </span>
+            <span>
+                {{ article.time_created}}
+            </span>
+        </div>
+        <span>
+            {{ article.title }}
+        </span>
+        <p>{{article.description }}</p>
+        {% if article.image %}
+            <img src="{{ article.image.url }}" class="img-fluid w-50" />
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="border border-dark m-2 p-2 w-50">
+        <div class="d-flex justify-content-between">
+            <span>
+                {{ article.user }} a posté une critique
+            </span>
+            <span>
+                {{ article.time_created }}
+            </span>
+        </div>
+        <span>
+            {{ article.headline }} - {{ article.rating }}
+        </span>
+        <p>{{ article.body }}</p>
+        <div class="border border-dark m-3 p-2">
+            <div class="d-flex justify-content-between">
+                <span>
+                    {{ article.ticket.user }} a demandé une critique
+                </span>
+                <span>
+                    {{ article.ticket.time_created}}
+                </span>
+            </div>
+            <span>
+                {{ article.ticket.title }}
+            </span>
+            <p>{{article.ticket.description }}</p>
+            {% if article.ticket.image %}
+                <img src="{{ article.ticket.image.url }}" class="img-fluid w-50" />
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>{% endblock %}

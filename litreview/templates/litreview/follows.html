@@ -1,32 +1,44 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<form action="" method="post" name="add_follow"
-      class="m-5" autocomplete="off">{% csrf_token %}
-    <input type="text" id="new_followed_username" name="new_followed" minlength="1"
-           placeholder="Nom d'Utilisateur" autocomplete="off"
-           class="col-12 mt-1">
-    <button type="submit" name="add_follow"
-            class="btn btn-outline-success mt-2">
-        Envoyer
-    </button>
-</form>
-<h4>abonnement</h4>
-{% for user in users_followed %}
-{{ user }}
-<form action="" method="post" name="unfollow"
-      class="" autocomplete="off">{% csrf_token %}
-    <button type="submit" name="unfollow" value="{{user.id}}"
-            class="btn btn-outline-warning">
-        Désabonner
-    </button>
-</form>
-{% endfor %}
-<hr>
-<h4>abonnés</h4>
-
-{% for user in users_following %}
-{{ user }}
-{% endfor %}
-
+<div class="d-flex align-items-center flex-column m-2">
+    <div class="w-50">
+        <h4 class="text-center">Suivre d'autres utilisateurs</h4>
+        <form action="" method="post" name="add_follow"
+              class="m-2" autocomplete="off">{% csrf_token %}
+            <input type="text" id="new_followed_username" name="new_followed" minlength="1"
+                   placeholder="Nom d'Utilisateur" autocomplete="off"
+                   class="col-12 mt-1">
+            <button type="submit" name="add_follow"
+                    class="btn btn-outline-success mt-2">
+                Envoyer
+            </button>
+        </form>
+    </div>
+    <div class="w-50">
+        <h4 class="text-center">Abonnements</h4>
+        <div class="list-group">
+            {% for user in users_followed %}
+            <div class="list-group-item d-flex justify-content-between">
+                <span>{{ user }}</span>
+                <form action="" method="post" name="unfollow"
+                      class="" autocomplete="off">{% csrf_token %}
+                    <button type="submit" name="unfollow" value="{{user.id}}"
+                            class="btn btn-outline-warning">
+                        Désabonner
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="w-50">
+        <h4 class="text-center">Abonnés</h4>
+        <div class="list-group">
+        {% for user in users_following %}
+            <div class="list-group-item">{{ user }}</div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

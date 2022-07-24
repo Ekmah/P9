@@ -2,7 +2,7 @@
 
 {% block content %}
 <form action="" method="post" name="critic"
-      class="m-5" id="">{% csrf_token %}
+      class="m-5" id="" enctype="multipart/form-data">{% csrf_token %}
     {% if form_ask %}
     {{ form_ask }}
     {% endif %}
@@ -14,7 +14,17 @@
     <hr>
     {% endif %}
     {% if form_answr %}
-    {{ form_answr }}
+    {{ form_answr.headline.label }}:
+    {{ form_answr.headline }}
+    {{ form_answr.rating.label }}:<br>
+    {% for radio in form_answr.rating %}
+    <div class="form-check form-check-inline">
+        {{ radio }}
+    </div>
+    {% endfor %}<br>
+    {{ form_answr.body.label }}:
+    {{ form_answr.body }}
+
     {% endif %}
     <button type="submit" name="critic"
             class="btn btn-outline-success mt-2">

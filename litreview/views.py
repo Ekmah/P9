@@ -57,6 +57,7 @@ def signup_view(request):
 
 def ask_critic(request):
     if request.method == 'POST':
+        print(request.POST, request.FILES)
         form_ask = AskCriticForm(request.POST, request.FILES)
         if form_ask.is_valid():
             ticket = form_ask.save(commit=False)
