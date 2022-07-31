@@ -74,6 +74,7 @@ def signup_view(request):
     return render(request, 'registration/signup.html')
 
 
+@login_required
 def ask_critic(request):
     if request.method == 'POST':
         print(request.POST, request.FILES)
@@ -89,6 +90,7 @@ def ask_critic(request):
     return render(request, 'litreview/critic_form.html', context)
 
 
+@login_required
 def create_critic(request):
     if request.method == 'POST':
         form_ask = AskCriticForm(request.POST, request.FILES)
@@ -110,6 +112,7 @@ def create_critic(request):
     return render(request, 'litreview/critic_form.html', context)
 
 
+@login_required
 def answer_critic(request, ticket_id):
     ticket = False
     if request.method == 'POST':
@@ -127,6 +130,7 @@ def answer_critic(request, ticket_id):
     return render(request, 'litreview/critic_form.html', context)
 
 
+@login_required
 def modify_critic(request, review_id):
     review = Review.objects.get(id=review_id)
     if request.method == 'POST':
@@ -142,6 +146,7 @@ def modify_critic(request, review_id):
     return render(request, 'litreview/critic_form.html', context)
 
 
+@login_required
 def modify_ask(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     if request.method == 'POST':
@@ -157,6 +162,7 @@ def modify_ask(request, ticket_id):
     return render(request, 'litreview/critic_form.html', context)
 
 
+@login_required
 def follows(request):
     if request.method == 'POST':
         data = dict(request.POST.items())

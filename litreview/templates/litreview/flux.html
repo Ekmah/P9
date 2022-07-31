@@ -15,7 +15,11 @@
     <div class="border border-dark m-2 p-2 w-50">
         <div class="d-flex justify-content-between">
             <span>
+                {% if request.user == article.user %}
+                Vous avez demandé une critique
+                {% else %}
                 {{article.user}} a demandé une critique
+                {% endif %}
             </span>
             <span>
                 {{ article.time_created}}
@@ -52,20 +56,28 @@
     <div class="border border-dark m-2 p-2 w-50">
         <div class="d-flex justify-content-between">
             <span>
+                {% if request.user == article.user %}
+                Vous avez posté une critique
+                {% else %}
                 {{ article.user }} a posté une critique
+                {% endif %}
             </span>
             <span>
                 {{ article.time_created }}
             </span>
         </div>
         <span>
-            {{ article.headline }} - {{ article.rating }}
+            {{ article.headline }} - {% include "litreview/rating.html" %}
         </span>
         <p>{{ article.body }}</p>
         <div class="border border-dark m-3 p-2">
             <div class="d-flex justify-content-between">
                 <span>
-                    {{ article.ticket.user }} a demandé une critique
+                    {% if request.user == article.ticket.user %}
+                    Vous avez demandé une critique
+                    {% else %}
+                    {{article.ticket.user}} a demandé une critique
+                    {% endif %}
                 </span>
                 <span>
                     {{ article.ticket.time_created}}

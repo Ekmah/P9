@@ -10,7 +10,11 @@
             <div class="border border-dark m-2 p-2 w-50">
                 <div class="d-flex justify-content-between">
                     <span>
-                        {{ticket.user}} a demandé une critique
+                        {% if request.user == article.user %}
+                        Vous avez demandé une critique
+                        {% else %}
+                        {{article.user}} a demandé une critique
+                        {% endif %}
                     </span>
                     <span>
                         {{ ticket.time_created}}
@@ -30,6 +34,11 @@
     {% if form_ask %}
     <h5>Livre/Article</h5><br>
     {{ form_ask }}
+    {% if form_ask.instance.id %}
+    <div class="alert alert-info my-2 p-2" role="alert">
+        L'image du livre est bien enregistré mais n'est pas affiché.
+    </div>
+    {% endif %}
     {% endif %}
 
     {% if form_ask and form_answr %}
