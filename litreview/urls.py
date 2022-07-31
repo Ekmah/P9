@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.generic.base import RedirectView
 
 from . import views
 
@@ -18,4 +17,3 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout_v'),
     path('signup', views.signup_view, name='signup_v'),
     ]
-

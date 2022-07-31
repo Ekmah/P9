@@ -1,7 +1,5 @@
 from django import forms
-from litreview.models import Ticket, Review, UserFollows
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from litreview.models import Ticket, Review
 
 
 class AskCriticForm(forms.ModelForm):
