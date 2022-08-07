@@ -1,9 +1,9 @@
 from itertools import chain
 from django.shortcuts import render, redirect
-from django.db.models import Max, Q, Count
+from django.db.models import Q
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from litreview.models import Ticket, Review, UserFollows
 from litreview.forms import AskCriticForm, AnswerCriticForm
 
@@ -17,7 +17,6 @@ def flux(request):
             Q(user__in=follows) | Q(user=request.user))
         reviews = Review.objects.filter(
             Q(user__in=follows) | Q(user=request.user))
-        print(tickets, reviews)
         articles = sorted(chain(tickets, reviews),
                           key=lambda d: d.time_created, reverse=True)
     except AttributeError:
@@ -36,7 +35,6 @@ def posts(request):
     try:
         tickets = Ticket.objects.filter(user=request.user)
         reviews = Review.objects.filter(user=request.user)
-        print(tickets, reviews)
         articles = sorted(chain(tickets, reviews),
                           key=lambda d: d.time_created, reverse=True)
     except AttributeError:
@@ -77,7 +75,6 @@ def signup_view(request):
 @login_required
 def ask_critic(request):
     if request.method == 'POST':
-        print(request.POST, request.FILES)
         form_ask = AskCriticForm(request.POST, request.FILES)
         if form_ask.is_valid():
             ticket = form_ask.save(commit=False)
@@ -134,6 +131,7 @@ def answer_critic(request, ticket_id):
 def modify_critic(request, review_id):
     review = Review.objects.get(id=review_id)
     if request.method == 'POST':
+        ticket = False
         form_answr = AnswerCriticForm(request.POST, instance=review)
         if form_answr.is_valid():
             review = form_answr.save(commit=False)
@@ -183,4 +181,3 @@ def follows(request):
     context = {'users_following': those_users_follow_the_user,
                'users_followed': the_user_follow_those_users}
     return render(request, 'litreview/follows.html', context)
-
