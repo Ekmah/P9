@@ -2,4 +2,3 @@
 project/settings.py
 __pycache__
 /.idea/
-/media/*
